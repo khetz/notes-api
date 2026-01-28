@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Configuration;
 using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace NotesAPI.Extensions
 {
@@ -13,9 +14,11 @@ namespace NotesAPI.Extensions
             return services;
         }
 
-        public static IServiceCollection RegisterDbContexts(this IServiceCollection services)
+        public static IServiceCollection RegisterDbContexts(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(
+                    configuration.GetConnectionString(DatabaseConfiguration.NotesDatabase)));
             return services;
         }
     }
