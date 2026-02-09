@@ -1,4 +1,3 @@
-using NotesAPI.Endpoints;
 using NotesAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +13,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapNoteEndpoints();
+app.MapEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
