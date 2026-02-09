@@ -11,6 +11,9 @@ namespace NotesAPI.Extensions
             services.Configure<DatabaseConfiguration>(
                 configuration.GetSection(DatabaseConfiguration.NotesDatabase));
 
+            services.Configure<JwtSettings>(
+                configuration.GetSection(JwtSettings.SectionName));
+
             return services;
         }
 
