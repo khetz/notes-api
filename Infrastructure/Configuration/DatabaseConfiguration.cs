@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-
-namespace Infrastructure.Configuration
+﻿namespace Infrastructure.Configuration
 {
     public class DatabaseConfiguration
     {
