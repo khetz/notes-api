@@ -2,11 +2,11 @@
 {
     public static class NoteEndpoints
     {
-        public static void MapNoteEndpoints(this WebApplication app)
+        public static void MapNoteEndpoints(this RouteGroupBuilder group)
         {
-            var group = app.MapGroup("notes");
+            var notesGroup = group.MapGroup("notes");
 
-            group.MapGet("", Handler);
+            notesGroup.MapGet("", Handler);
         }
 
         private static Task Handler()
