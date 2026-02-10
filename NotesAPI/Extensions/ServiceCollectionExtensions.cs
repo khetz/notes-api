@@ -6,6 +6,7 @@ using Infrastructure.Security;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -26,9 +27,12 @@ namespace NotesAPI.Extensions
 
         public static IServiceCollection RegisterDbContexts(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString(DatabaseConfiguration.NotesDatabase)));
+            services.AddDbContext<AppDbContext>((sp, options) =>
+            {
+                var databaseConfig = sp.GetRequiredService<IOptions<DatabaseConfiguration>>().Value;
+                options.UseSqlServer(databaseConfig.ConnectionString);
+            });
+
             return services;
         }
 
