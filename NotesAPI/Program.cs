@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services
 builder.Services
     .AddConfig(builder.Configuration)
-    .RegisterDbContexts(builder.Configuration);
+    .RegisterDbContexts(builder.Configuration)
+    .RegisterServices()
+    .AddJwtAuthentication(builder.Configuration);
 
 // OpenAPI/Swagger config
 builder.Services.AddEndpointsApiExplorer();
@@ -21,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.Run ();

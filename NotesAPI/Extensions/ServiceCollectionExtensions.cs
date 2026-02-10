@@ -1,7 +1,10 @@
 ﻿using Infrastructure.Configuration;
 using Infrastructure.Persistence;
 using Infrastructure.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace NotesAPI.Extensions
 {
@@ -29,6 +32,28 @@ namespace NotesAPI.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<JwtService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection(JwtSettings.SectionName);
+            var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey  = new SymmetricSecurityKey(secretKey)
+                };
+            });
 
             return services;
         }
