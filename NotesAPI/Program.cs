@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddConfig(builder.Configuration)
     .RegisterDbContexts(builder.Configuration)
+    .RegisterRepositories()
     .RegisterServices()
     .AddJwtAuthentication(builder.Configuration);
 

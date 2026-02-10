@@ -1,6 +1,9 @@
-﻿using Infrastructure.Configuration;
+﻿using Application.Interfaces;
+using Infrastructure.Configuration;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Respositories;
 using Infrastructure.Security;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -32,6 +35,14 @@ namespace NotesAPI.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<JwtService>();
+            services.AddScoped<IUserService, UserService>();
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }
