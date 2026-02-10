@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Configuration;
 using Infrastructure.Persistence;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace NotesAPI.Extensions
@@ -22,6 +23,13 @@ namespace NotesAPI.Extensions
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString(DatabaseConfiguration.NotesDatabase)));
+            return services;
+        }
+
+        public static IServiceCollection RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<JwtService>();
+
             return services;
         }
     }
