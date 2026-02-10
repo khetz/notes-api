@@ -1,5 +1,7 @@
-﻿using Infrastructure.Security;
+﻿using Application.Interfaces;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
+using NotesAPI.Mappers;
 using NotesAPI.Requests;
 
 namespace NotesAPI.Endpoints
@@ -11,6 +13,7 @@ namespace NotesAPI.Endpoints
             var authGroup = group.MapGroup("auth");
 
             authGroup.MapPost("login", LoginHandler);
+            authGroup.MapPost("register", RegistrationHandler);
         }
 
         private static IResult LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] JwtService jwtService)
@@ -23,6 +26,13 @@ namespace NotesAPI.Endpoints
 
             var token = jwtService.GenerateToken(1, loginRequest.Username);
             return Results.Ok(token);
+        }
+
+        private static async Task<IResult> RegistrationHandler([FromBody] RegisterUserRequest registrationRequest, [FromServices] IUserService userService)
+        {
+            await userService.RegisterUserAsync(registrationRequest.ToApplicationRegisterUserRequest());
+
+            return Results.Ok();
         }
     }
 }
