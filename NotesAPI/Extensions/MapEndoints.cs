@@ -9,7 +9,6 @@ public static class MapEndoints
         var group = app.MapGroup("api");
 
         group.MapNoteEndpoints();
-        group.MapNoteEndpoints();
         group.MapAuthEndpoints();
     }
 }
