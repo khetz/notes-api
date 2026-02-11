@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    internal class NoteDbModel
+    public class NoteDbModel
     {
         public int Id { get; set; }
         public required string Title { get; set; }

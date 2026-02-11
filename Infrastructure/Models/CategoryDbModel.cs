@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    internal class CategoryDbModel
+    public class CategoryDbModel
     {
         public int Id { get; set; }
         public required string Name { get; set; }

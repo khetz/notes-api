@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    internal class UserDbModel
+    public class UserDbModel
     {
         public int Id { get; set; }
         public required string Username { get; set; }
