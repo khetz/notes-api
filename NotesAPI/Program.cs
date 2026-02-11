@@ -13,6 +13,7 @@ builder.Services
 // OpenAPI/Swagger config
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -25,6 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.Run ();
