@@ -8,6 +8,6 @@ namespace Infrastructure.Models
         public required string Username { get; set; }
         public required string PasswordHash { get; set; }
 
-        public ICollection<Note> Notes { get; set; } = [];
+        public ICollection<NoteDbModel> Notes { get; set; } = [];
     }
 }

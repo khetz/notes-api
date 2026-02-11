@@ -7,6 +7,6 @@ namespace Infrastructure.Models
         public int Id { get; set; }
         public required string Name { get; set; }
 
-        public ICollection<Note> Notes { get; set; } = [];
+        public ICollection<NoteDbModel> Notes { get; set; } = [];
     }
 }
