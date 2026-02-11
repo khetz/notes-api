@@ -1,8 +1,7 @@
-﻿using Application.Interfaces;
+﻿using Application.Inputs;
+using Application.Interfaces;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
-using NotesAPI.Mappers;
-using NotesAPI.Requests;
 
 namespace NotesAPI.Endpoints
 {
@@ -30,7 +29,7 @@ namespace NotesAPI.Endpoints
 
         private static async Task<IResult> RegistrationHandler([FromBody] RegisterUserRequest registrationRequest, [FromServices] IUserService userService)
         {
-            await userService.RegisterUserAsync(registrationRequest.ToApplicationRegisterUserRequest());
+            await userService.RegisterUserAsync(registrationRequest);
 
             return Results.Ok();
         }
