@@ -1,6 +1,5 @@
 ﻿using Application.Inputs;
 using Application.Services;
-using Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NotesAPI.Endpoints
@@ -15,16 +14,13 @@ namespace NotesAPI.Endpoints
             authGroup.MapPost("register", RegistrationHandler);
         }
 
-        private static IResult LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] JwtService jwtService)
+        private static async Task<IResult> LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] IUserService userService)
         {
-            // fetch hashed password
-            var storedHashedPassword = "$hibrgjkb";
+            var loginResult = await userService.LoginAsync(loginRequest);
 
-            if (!PasswordHashingService.VerifyPassword(loginRequest.Password, storedHashedPassword))
-                return Results.Unauthorized();
-
-            var token = jwtService.GenerateToken(1, loginRequest.Username);
-            return Results.Ok(token);
+            return loginResult.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
         }
 
         private static async Task<IResult> RegistrationHandler([FromBody] RegisterUserRequest registrationRequest, [FromServices] IUserService userService)

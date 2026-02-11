@@ -11,5 +11,12 @@ namespace Infrastructure.Mappers
             Username = user.Username,
             PasswordHash = user.PasswordHash
         };
+
+        internal static UserDbModel ToDbUserModel(this User user) => new()
+        {
+            Id = user.Id,
+            Username = user.Username,
+            PasswordHash = user.PasswordHash
+        };
     }
 }
