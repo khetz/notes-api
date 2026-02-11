@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
     public class CategoryDbModel
     {
