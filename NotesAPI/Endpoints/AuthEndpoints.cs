@@ -1,5 +1,5 @@
 ﻿using Application.Inputs;
-using Application.Interfaces;
+using Application.Services;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 

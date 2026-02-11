@@ -1,6 +1,6 @@
 ﻿using Application.Inputs;
 
-namespace Application.Interfaces;
+namespace Application.Services;
 
 public interface IUserService
 {
