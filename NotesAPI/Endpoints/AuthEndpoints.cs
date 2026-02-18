@@ -33,7 +33,7 @@ namespace NotesAPI.Endpoints
             return Results.Ok();
         }
 
-        private static async Task<IResult> RefreshHandler([FromBody] string refreshToken,
+        private static async Task<IResult> RefreshHandler([FromBody] RefreshTokenRequest refreshTokenRequest,
             [FromServices] IAuthService authService)
         {
             var refreshTokenObject = await authService.RefreshAsync(refreshToken);
