@@ -13,6 +13,7 @@ namespace NotesAPI.Endpoints
 
             authGroup.MapPost("login", LoginHandler);
             authGroup.MapPost("register", RegistrationHandler);
+            authGroup.MapPost("refresh", RefreshHandler);
         }
 
         private static async Task<IResult> LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] IAuthService authService)
@@ -32,10 +33,14 @@ namespace NotesAPI.Endpoints
             return Results.Ok();
         }
 
-        private static async Task<RefreshTokenResponse> RefreshHandler([FromBody] RefreshTokenRequest tokenRequest)
+        private static async Task<IResult> RefreshHandler([FromBody] string refreshToken,
+            [FromServices] IAuthService authService)
         {
+            var refreshTokenObject = await authService.RefreshAsync(refreshToken);
 
-            return new RefreshTokenResponse() { Token = "", Username = "", ExpirationDate = DateTime.UtcNow };
+            return refreshTokenObject.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
         }
     }
 }
