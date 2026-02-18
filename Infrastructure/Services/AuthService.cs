@@ -26,7 +26,7 @@ namespace Infrastructure.Services
             _jwtSettings = jwtSettings.Value;
         }
 
-        public async Task<ErrorOr<string>> LoginAsync(LoginRequest loginRequest)
+        public async Task<ErrorOr<RefreshTokenResponse>> LoginAsync(LoginRequest loginRequest)
         {
             var user = await _userService.GetByUsernameAsync(loginRequest.Username);
 
@@ -37,8 +37,18 @@ namespace Infrastructure.Services
             if (!PasswordHashingService.VerifyPassword(loginRequest.Password, storedHashedPassword))
                 return Error.Unauthorized();
 
-            var token = _jwtService.GenerateToken(user.Value.Id, loginRequest.Username);
-            return token;
+            var accessToken = _jwtService.GenerateToken(user.Value.Id, loginRequest.Username);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            var refreshTokenObject = new RefreshToken
+            {
+                Token = accessToken,
+                Username = loginRequest.Username,
+                ExpirationDate = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays)
+            };
+
+            await _refreshTokenRepository.AddAsync(refreshTokenObject);
+
+            return new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest registrationRequest)
