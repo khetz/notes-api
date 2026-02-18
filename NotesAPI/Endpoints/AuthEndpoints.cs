@@ -1,5 +1,4 @@
 ﻿using Application.Inputs;
-using Application.Outputs;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
