@@ -12,7 +12,7 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<ErrorOr<RefreshTokenResponse>> Refresh(string refreshToken)
+        public Task<ErrorOr<RefreshTokenResponse>> RefreshAsync(string refreshToken)
         {
             throw new NotImplementedException();
         }
