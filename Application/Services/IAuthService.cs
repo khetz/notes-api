@@ -8,6 +8,6 @@ namespace Application.Services
     {
         Task RegisterUserAsync(RegisterUserRequest registrationRequest);
         Task<ErrorOr<string>> LoginAsync(LoginRequest loginRequest);
-        Task<ErrorOr<RefreshTokenResponse>> RefreshAsync(string  refreshToken);
+        Task<ErrorOr<RefreshTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }
