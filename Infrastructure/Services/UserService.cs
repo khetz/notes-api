@@ -4,6 +4,7 @@ using Application.Services;
 using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Security;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace Infrastructure.Services
 {
@@ -18,30 +19,9 @@ namespace Infrastructure.Services
             _jwtService = jwtService;
         }
 
-        public async Task<ErrorOr<string>> LoginAsync(LoginRequest loginRequest)
+        public async Task<ErrorOr<User>> GetByUsernameAsync(string username)
         {
-            var user = await _userRepository.GetByUsernameAsync(loginRequest.Username);
-
-            if (user.IsError) return user.FirstError;
-
-            var storedHashedPassword = user.Value.PasswordHash;
-
-            if (!PasswordHashingService.VerifyPassword(loginRequest.Password, storedHashedPassword))
-                return Error.Unauthorized();
-
-            var token = _jwtService.GenerateToken(user.Value.Id, loginRequest.Username);
-            return token;
-        }
-
-        public async Task RegisterUserAsync(RegisterUserRequest registrationRequest)
-        {
-            var user = new User
-            {
-                Username = registrationRequest.Username,
-                PasswordHash = PasswordHashingService.HashPassword(registrationRequest.Password)
-            };
-
-            await _userRepository.AddAsync(user);
+            return await _userRepository.GetByUsernameAsync(username);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Application.Inputs;
+using Domain.Entities;
 using ErrorOr;
 
 namespace Application.Services;
 
 public interface IUserService
 {
-    Task RegisterUserAsync(RegisterUserRequest registrationRequest);
-    Task<ErrorOr<string>> LoginAsync(LoginRequest loginRequest);
+    Task<ErrorOr<User>> GetByUsernameAsync(string username);
 }

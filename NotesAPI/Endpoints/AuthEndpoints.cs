@@ -1,4 +1,5 @@
 ﻿using Application.Inputs;
+using Application.Outputs;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,20 +15,27 @@ namespace NotesAPI.Endpoints
             authGroup.MapPost("register", RegistrationHandler);
         }
 
-        private static async Task<IResult> LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] IUserService userService)
+        private static async Task<IResult> LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] IAuthService authService)
         {
-            var loginResult = await userService.LoginAsync(loginRequest);
+            var loginResult = await authService.LoginAsync(loginRequest);
 
             return loginResult.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
         }
 
-        private static async Task<IResult> RegistrationHandler([FromBody] RegisterUserRequest registrationRequest, [FromServices] IUserService userService)
+        private static async Task<IResult> RegistrationHandler([FromBody] RegisterUserRequest registrationRequest,
+            [FromServices] IAuthService authService)
         {
-            await userService.RegisterUserAsync(registrationRequest);
+            await authService.RegisterUserAsync(registrationRequest);
 
             return Results.Ok();
+        }
+
+        private static async Task<RefreshTokenResponse> RefreshHandler([FromBody] RefreshTokenRequest tokenRequest)
+        {
+
+            return new RefreshTokenResponse() { Token = "", Username = "", ExpirationDate = DateTime.UtcNow };
         }
     }
 }

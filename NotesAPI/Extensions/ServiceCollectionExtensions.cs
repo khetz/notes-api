@@ -42,6 +42,7 @@ namespace NotesAPI.Extensions
         {
             services.AddScoped<JwtService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }
@@ -49,7 +50,7 @@ namespace NotesAPI.Extensions
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             return services;
         }
 
