@@ -1,11 +1,11 @@
-﻿using Application.Outputs;
-using Domain.Entities;
+﻿using Domain.Entities;
+using ErrorOr;
 
 namespace Application.Interfaces
 {
     public interface IRefreshTokenRepository
     {
-        Task<RefreshTokenResponse> GetByTokenAsync(string token);
+        Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token);
         Task UpdateAsync(RefreshToken refreshToken);
     }
 }

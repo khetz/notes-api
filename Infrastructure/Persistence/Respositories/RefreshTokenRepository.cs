@@ -1,12 +1,12 @@
 ﻿using Application.Interfaces;
-using Application.Outputs;
 using Domain.Entities;
+using ErrorOr;
 
 namespace Infrastructure.Persistence.Respositories
 {
     public class RefreshTokenRepository : IRefreshTokenRepository
     {
-        public Task<RefreshTokenResponse> GetByTokenAsync(string token)
+        public Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token)
         {
             throw new NotImplementedException();
         }
