@@ -36,7 +36,7 @@ namespace NotesAPI.Endpoints
         private static async Task<IResult> RefreshHandler([FromBody] RefreshTokenRequest refreshTokenRequest,
             [FromServices] IAuthService authService)
         {
-            var refreshTokenObject = await authService.RefreshAsync(refreshToken);
+            var refreshTokenObject = await authService.RefreshAsync(refreshTokenRequest);
 
             return refreshTokenObject.MatchFirst(
                 value => Results.Ok(value),
