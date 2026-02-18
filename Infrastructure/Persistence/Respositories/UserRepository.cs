@@ -15,10 +15,12 @@ namespace Infrastructure.Persistence.Respositories
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(User user)
+        public async Task<ErrorOr<Created>> AddAsync(User user)
         {
             _dbContext.Users.Add(user.ToDbUserModel());
             await _dbContext.SaveChangesAsync();
+
+            return Result.Created;
         }
 
         public async Task<ErrorOr<User>> GetByUsernameAsync(string username)

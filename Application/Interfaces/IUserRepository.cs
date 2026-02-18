@@ -5,7 +5,7 @@ namespace Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task AddAsync(User user);
+        Task<ErrorOr<Created>> AddAsync(User user);
         Task<ErrorOr<User>> GetByUsernameAsync(string username);
     }
 }

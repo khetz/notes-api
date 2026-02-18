@@ -18,5 +18,10 @@ namespace Infrastructure.Services
         {
             return await _userRepository.GetByUsernameAsync(username);
         }
+
+        public async Task<ErrorOr<Created>> AddUserAsync(User user)
+        {
+            return await _userRepository.AddAsync(user);
+        }
     }
 }
