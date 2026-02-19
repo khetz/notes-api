@@ -1,19 +1,38 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using ErrorOr;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Respositories
 {
     public class RefreshTokenRepository : IRefreshTokenRepository
     {
-        public Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token)
+        private readonly AppDbContext _appDbContext;
+
+        public RefreshTokenRepository(AppDbContext appDbContext)
         {
-            throw new NotImplementedException();
+            _appDbContext = appDbContext;
         }
 
-        public Task UpdateAsync(RefreshToken refreshToken)
+        public async Task AddAsync(RefreshToken refreshToken)
         {
-            throw new NotImplementedException();
+            await _appDbContext.RefreshTokens.AddAsync(refreshToken);
+        }
+
+        public async Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token)
+        {
+            var refreshToken = await _appDbContext.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Token == token);
+
+            if (refreshToken == null) return Error.NotFound();
+
+            return refreshToken; 
+        }
+
+        public async Task UpdateAsync(RefreshToken refreshToken)
+        {
+            _appDbContext.RefreshTokens.Update(refreshToken);
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }
