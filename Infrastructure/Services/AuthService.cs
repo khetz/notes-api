@@ -41,7 +41,7 @@ namespace Infrastructure.Services
             var refreshToken = _jwtService.GenerateRefreshToken();
             var refreshTokenObject = new RefreshToken
             {
-                Token = accessToken,
+                Token = refreshToken,
                 Username = loginRequest.Username,
                 ExpirationDate = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays)
             };
