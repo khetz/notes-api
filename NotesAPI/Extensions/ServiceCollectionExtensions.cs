@@ -69,7 +69,8 @@ namespace NotesAPI.Extensions
                     ValidateLifetime = true,
                     ValidIssuer = jwtSettings["Issuer"],
                     ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
