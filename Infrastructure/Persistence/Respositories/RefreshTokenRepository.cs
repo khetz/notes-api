@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Respositories
         public async Task AddAsync(RefreshToken refreshToken)
         {
             await _appDbContext.RefreshTokens.AddAsync(refreshToken);
+            await _appDbContext.SaveChangesAsync();
         }
 
         public async Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token)
