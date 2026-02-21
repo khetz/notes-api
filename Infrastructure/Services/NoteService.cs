@@ -20,7 +20,9 @@ namespace Infrastructure.Services
         public async Task CreatNoteAsync(CreateNoteRequest request)
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            var userId = int.Parse(user?.Identity?.Name ?? "");
+            if (user == null) throw new KeyNotFoundException(nameof(user));
+
+            var userId = int.Parse(user.Identity?.Name ?? "");
 
             var note = request.ToNote(userId);
             await _noteRepository.CreateAsync(note);
