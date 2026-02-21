@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Infrastructure.Services
 {
@@ -22,7 +23,7 @@ namespace Infrastructure.Services
             var user = _httpContextAccessor.HttpContext?.User;
             if (user == null) throw new KeyNotFoundException(nameof(user));
 
-            var userId = int.Parse(user.Identity?.Name ?? "");
+            var userId = int.Parse(user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? "");
 
             var note = request.ToNote(userId);
             await _noteRepository.CreateAsync(note);
