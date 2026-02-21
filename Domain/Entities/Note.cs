@@ -9,7 +9,7 @@
         public DateTime LastUpdatedAt { get; set; }
         public required int Order {  get; set; }
 
-        public required int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category? Category { get; set; }
         public required int UserId { get; set; }
         public User? User { get; set; }
