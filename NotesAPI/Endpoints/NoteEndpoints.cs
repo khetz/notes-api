@@ -31,5 +31,10 @@ namespace NotesAPI.Endpoints
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
         }
+
+        private async static Task<IResult> DeleteNoteHandler([FromRoute] int id, [FromServices] INoteService noteService)
+        {
+            return Results.Ok();
+        }
     }
 }
