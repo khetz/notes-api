@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using Application.Inputs;
+using Application.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NotesAPI.Endpoints
 {
@@ -8,13 +10,12 @@ namespace NotesAPI.Endpoints
         {
             var notesGroup = group.MapGroup("notes").RequireAuthorization();
 
-            notesGroup.MapGet("", Handler);
+            notesGroup.MapPost("", CreateNoteHandler);
         }
 
-        private static Task Handler(ClaimsPrincipal user)
+        private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
         {
-            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Task.CompletedTask;
+            await noteService.CreatNoteAsync(request);
         }
     }
 }
