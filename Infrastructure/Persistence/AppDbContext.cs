@@ -32,5 +32,40 @@ namespace Infrastructure.Persistence
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetTimestamps();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetTimestamps()
+        {
+            var notes = ChangeTracker.Entries<Note>()
+                .Where(n => n.State == EntityState.Added || n.State == EntityState.Modified);
+
+            foreach (var note in notes)
+            {
+                note.Entity.LastUpdatedAt = DateTime.UtcNow;
+
+                if (note.State == EntityState.Added)
+                {
+                    note.Entity.CreatedAt = DateTime.UtcNow;
+                }
+            }
+
+            var categories = ChangeTracker.Entries<Category>()
+                .Where(c => c.State == EntityState.Added || c.State == EntityState.Modified);
+
+            foreach (var category in categories)
+            {
+                category.Entity.LastUpdatedAt = DateTime.UtcNow;
+
+                if (category.State == EntityState.Added)
+                {
+                    category.Entity.CreatedAt = DateTime.UtcNow;
+                }
+            }
+        }
     }
 }
