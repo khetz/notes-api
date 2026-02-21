@@ -11,11 +11,25 @@ namespace NotesAPI.Endpoints
             var notesGroup = group.MapGroup("notes").RequireAuthorization();
 
             notesGroup.MapPost("", CreateNoteHandler);
+            notesGroup.MapPut("/{id}", UpdateNoteHandler);
+            notesGroup.MapDelete("/{id}", DeleteNoteHandler);
         }
 
         private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
         {
             await noteService.CreatNoteAsync(request);
+        }
+
+        private async static Task<IResult> UpdateNoteHandler([FromBody] UpdateNoteRequest request, [FromServices] INoteService noteService,
+            [FromRoute] int id)
+        {
+            if (id != request.Id) return Results.Problem("Route id does not match note id");
+
+            var updateResult = await noteService.UpdateNoteAsync(request);
+
+            return updateResult.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
         }
     }
 }

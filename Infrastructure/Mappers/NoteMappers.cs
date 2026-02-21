@@ -15,5 +15,17 @@ namespace Infrastructure.Mappers
             User = null,
             Order = 0
         };
+
+        internal static Note ToNote(this UpdateNoteRequest request, int userId) => new()
+        {
+            Id = request.Id,
+            Title = request.Title,
+            Content = request.Content,
+            CategoryId = null,
+            Category = null,
+            UserId = userId,
+            User = null,
+            Order = 0
+        };
     }
 }
