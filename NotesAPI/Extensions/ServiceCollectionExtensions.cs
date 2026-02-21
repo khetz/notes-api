@@ -44,6 +44,7 @@ namespace NotesAPI.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<INoteService, NoteService>();
+            services.AddHttpContextAccessor();
 
             return services;
         }
