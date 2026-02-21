@@ -43,6 +43,7 @@ namespace NotesAPI.Extensions
             services.AddScoped<JwtService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<INoteService, NoteService>();
 
             return services;
         }
@@ -51,6 +52,8 @@ namespace NotesAPI.Extensions
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<INoteRepository, NoteRepository>();
+
             return services;
         }
 
