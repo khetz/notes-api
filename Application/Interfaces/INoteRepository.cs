@@ -6,5 +6,6 @@ namespace Application.Interfaces
     {
         Task CreateAsync(Note note);
         Task UpdateAsync(Note note);
+        Task DeleteASync(int id, int userId);
     }
 }

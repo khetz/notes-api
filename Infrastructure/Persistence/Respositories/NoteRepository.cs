@@ -19,6 +19,16 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteASync(int id, int userId)
+        {
+            var note = await _appDbContext
+                .Notes.FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId)
+                ?? throw new KeyNotFoundException();
+
+            _appDbContext.Notes.Remove(note);
+            await _appDbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(Note note)
         {
             var noteToUpdate = await _appDbContext.Notes

@@ -7,5 +7,6 @@ namespace Application.Services
     {
         Task CreatNoteAsync(CreateNoteRequest request);
         Task<ErrorOr<Updated>> UpdateNoteAsync(UpdateNoteRequest request);
+        Task<ErrorOr<Deleted>> DeleteNoteAsync(int id);
     }
 }
