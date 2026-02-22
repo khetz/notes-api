@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Inputs;
+using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,13 +20,25 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteASync(int id, int userId)
+        public async Task DeleteAsync(int id, int userId)
         {
             var note = await _appDbContext
                 .Notes.FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId)
                 ?? throw new KeyNotFoundException();
 
             _appDbContext.Notes.Remove(note);
+            await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task MoveAsync(MoveNoteRequest request, int userId)
+        {
+            var note = await _appDbContext
+                .Notes.FirstOrDefaultAsync(n => n.Id == request.Id && n.UserId == userId)
+                ?? throw new KeyNotFoundException();
+
+            note.Order = request.Order;
+            note.CategoryId = request.CategoryId;
+
             await _appDbContext.SaveChangesAsync();
         }
 

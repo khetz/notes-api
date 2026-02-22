@@ -29,8 +29,15 @@ namespace Infrastructure.Services
         public async Task<ErrorOr<Deleted>> DeleteNoteAsync(int id)
         {
             var userId = GetUserId();
-            await _noteRepository.DeleteASync(id, userId);
+            await _noteRepository.DeleteAsync(id, userId);
             return Result.Deleted;
+        }
+
+        public async Task<ErrorOr<Updated>> MoveNoteAsync(MoveNoteRequest request)
+        {
+            var userId = GetUserId();
+            await _noteRepository.MoveAsync(request, userId);
+            return Result.Updated;
         }
 
         public async Task<ErrorOr<Updated>> UpdateNoteAsync(UpdateNoteRequest request)
