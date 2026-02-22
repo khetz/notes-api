@@ -14,6 +14,7 @@ namespace NotesAPI.Endpoints
             notesGroup.MapPut("/{id}", UpdateNoteHandler);
             notesGroup.MapDelete("/{id}", DeleteNoteHandler);
             notesGroup.MapPatch("/{id}", MoveNoteHandler);
+            notesGroup.MapGet("/{id}", )
         }
 
         private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
@@ -48,6 +49,14 @@ namespace NotesAPI.Endpoints
             var updateResult = await noteService.MoveNoteAsync(request);
             return updateResult.MatchFirst(
                 value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private async static Task<IResult> GetNoteHandler([FromRoute] int id, [FromServices] INoteService noteService)
+        {
+            var note = await noteService.GetNoteAsync(id);
+            return note.MatchFirst(
+                value => Results.Ok(note),
                 firstError => Results.Problem(firstError.ToString()));
         }
     }

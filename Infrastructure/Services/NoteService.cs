@@ -1,6 +1,7 @@
 ﻿using Application.Inputs;
 using Application.Interfaces;
 using Application.Services;
+using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,13 @@ namespace Infrastructure.Services
             var userId = GetUserId();
             await _noteRepository.DeleteAsync(id, userId);
             return Result.Deleted;
+        }
+
+        public async Task<ErrorOr<Note>> GetNoteAsync(int id)
+        {
+            var userId = GetUserId();
+            var note = await _noteRepository.GetAsync(id, userId);
+            return note;
         }
 
         public async Task<ErrorOr<Updated>> MoveNoteAsync(MoveNoteRequest request)

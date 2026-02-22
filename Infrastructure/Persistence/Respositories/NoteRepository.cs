@@ -30,6 +30,13 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<Note> GetAsync(int id, int userId)
+        {
+            return await _appDbContext.Notes
+                .FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId)
+                ?? throw new KeyNotFoundException();
+        }
+
         public async Task MoveAsync(MoveNoteRequest request, int userId)
         {
             var note = await _appDbContext
