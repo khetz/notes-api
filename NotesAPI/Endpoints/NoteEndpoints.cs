@@ -14,7 +14,7 @@ namespace NotesAPI.Endpoints
             notesGroup.MapPut("/{id}", UpdateNoteHandler);
             notesGroup.MapDelete("/{id}", DeleteNoteHandler);
             notesGroup.MapPatch("/{id}", MoveNoteHandler);
-            notesGroup.MapGet("/{id}", )
+            notesGroup.MapGet("/{id}", GetNoteHandler);
         }
 
         private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
