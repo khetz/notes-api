@@ -10,5 +10,6 @@ public static class MapEndoints
 
         group.MapNoteEndpoints();
         group.MapAuthEndpoints();
+        group.MapCategoryEndpoints();
     }
 }

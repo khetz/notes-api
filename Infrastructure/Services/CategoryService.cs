@@ -1,0 +1,37 @@
+﻿using Application.Inputs;
+using Application.Interfaces;
+using Application.Services;
+using Infrastructure.Mappers;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+
+namespace Infrastructure.Services
+{
+    public class CategoryService : ICategoryService
+    {
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CategoryService(ICategoryRepository categoryRepository
+            , IHttpContextAccessor httpContextAccessor)
+        {
+            _categoryRepository = categoryRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task CreateCategoryAsync(CreateCategoryRequest request)
+        {
+            var userId = GetUserId();
+            var category = request.ToCategory(userId);
+            await _categoryRepository.CreateAsync(category);
+        }
+
+        private int GetUserId()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user == null) throw new KeyNotFoundException(nameof(user));
+
+            return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
+        }
+    }
+}

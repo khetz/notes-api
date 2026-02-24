@@ -45,6 +45,7 @@ namespace NotesAPI.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<INoteService, NoteService>();
             services.AddHttpContextAccessor();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }
@@ -54,6 +55,7 @@ namespace NotesAPI.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             return services;
         }
