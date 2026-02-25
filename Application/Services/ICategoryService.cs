@@ -9,5 +9,6 @@ namespace Application.Services
         Task CreateCategoryAsync(CreateCategoryRequest request);
         Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request);
         Task<ErrorOr<IReadOnlyCollection<Category>>> GetCategoriesAsync(bool includeNotes);
+        Task<ErrorOr<Deleted>> DeleteCategoryAsync(int categoryId);
     }
 }

@@ -11,8 +11,9 @@ namespace NotesAPI.Endpoints
             var group = routeBuilder.MapGroup("categories");
 
             group.MapPost("", CreateCategoryHandler);
-            group.MapPatch("/{id}", UpdateCategoryHandler);
+            group.MapPatch("{id}", UpdateCategoryHandler);
             group.MapGet("", GetAllCategoriesHandler);
+            group.MapDelete("{id}", DeleteCategoryHandler);
         }
 
         private async static Task CreateCategoryHandler([FromBody] CreateCategoryRequest request,
@@ -37,6 +38,15 @@ namespace NotesAPI.Endpoints
         {
             var categories = await categoryService.GetCategoriesAsync(includeNotes);
             return categories.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private async static Task<IResult> DeleteCategoryHandler([FromRoute] int id,
+            [FromServices] ICategoryService categoryService)
+        {
+            var deletionResult = await categoryService.DeleteCategoryAsync(id);
+            return deletionResult.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
         }

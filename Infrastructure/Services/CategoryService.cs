@@ -28,6 +28,13 @@ namespace Infrastructure.Services
             await _categoryRepository.CreateAsync(category);
         }
 
+        public async Task<ErrorOr<Deleted>> DeleteCategoryAsync(int categoryId)
+        {
+            var userId = GetUserId();
+            await _categoryRepository.DeleteAsync(categoryId, userId);
+            return Result.Deleted;
+        }
+
         public async Task<ErrorOr<IReadOnlyCollection<Category>>> GetCategoriesAsync(bool includeNotes)
         {
             var userId = GetUserId();
