@@ -19,6 +19,16 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int categoryId, int userId)
+        {
+            var category = await _appDbContext.Categories
+                .FirstOrDefaultAsync(c => c.Id == categoryId && c.UserId == userId)
+                ?? throw new KeyNotFoundException();
+
+            _appDbContext.Categories.Remove(category);
+            await _appDbContext.SaveChangesAsync();
+        }
+
         public async Task<IReadOnlyCollection<Category>> GetAllAsync(int userId, bool includeNotes)
         {
             var categoriesQuery = _appDbContext.Categories
@@ -32,8 +42,8 @@ namespace Infrastructure.Persistence.Respositories
         public async Task UpdateAsync(int categoryId, int userId, string name)
         {
             var category = await _appDbContext.Categories
-                .FirstOrDefaultAsync(c => c.Id == categoryId && c.UserId == userId);
-            if (category == null) throw new KeyNotFoundException();
+                .FirstOrDefaultAsync(c => c.Id == categoryId && c.UserId == userId)
+                ?? throw new KeyNotFoundException();
 
             category.Name = name;
             await _appDbContext.SaveChangesAsync();
