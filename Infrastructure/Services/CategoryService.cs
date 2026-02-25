@@ -1,6 +1,7 @@
 ﻿using Application.Inputs;
 using Application.Interfaces;
 using Application.Services;
+using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,13 @@ namespace Infrastructure.Services
             var userId = GetUserId();
             var category = request.ToCategory(userId);
             await _categoryRepository.CreateAsync(category);
+        }
+
+        public async Task<ErrorOr<IReadOnlyCollection<Category>>> GetCategoriesAsync(bool includeNotes)
+        {
+            var userId = GetUserId();
+            var categories = await _categoryRepository.GetAllAsync(userId, includeNotes);
+            return categories.ToList();
         }
 
         public async Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request)

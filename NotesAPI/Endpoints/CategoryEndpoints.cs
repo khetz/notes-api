@@ -12,6 +12,7 @@ namespace NotesAPI.Endpoints
 
             group.MapPost("", CreateCategoryHandler);
             group.MapPatch("/{id}", UpdateCategoryHandler);
+            group.MapGet("", GetAllCategoriesHandler);
         }
 
         private async static Task CreateCategoryHandler([FromBody] CreateCategoryRequest request,
@@ -27,6 +28,15 @@ namespace NotesAPI.Endpoints
 
             var updateResult = await categoryService.UpdateCategoryAsync(request);
             return updateResult.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private async static Task<IResult> GetAllCategoriesHandler([FromQuery] bool includeNotes,
+            [FromServices] ICategoryService categoryService)
+        {
+            var categories = await categoryService.GetCategoriesAsync(includeNotes);
+            return categories.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
         }
