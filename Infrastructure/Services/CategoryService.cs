@@ -1,6 +1,7 @@
 ﻿using Application.Inputs;
 using Application.Interfaces;
 using Application.Services;
+using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -24,6 +25,13 @@ namespace Infrastructure.Services
             var userId = GetUserId();
             var category = request.ToCategory(userId);
             await _categoryRepository.CreateAsync(category);
+        }
+
+        public async Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request)
+        {
+            var userId = GetUserId();
+            await _categoryRepository.UpdateAsync(request.Id, userId, request.Name);
+            return Result.Updated;
         }
 
         private int GetUserId()

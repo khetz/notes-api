@@ -5,5 +5,6 @@ namespace Application.Interfaces
     public interface ICategoryRepository
     {
         Task CreateAsync(Category category);
+        Task UpdateAsync(int categoryId, int userId, string name);
     }
 }
