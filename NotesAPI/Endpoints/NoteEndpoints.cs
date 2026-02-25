@@ -11,10 +11,10 @@ namespace NotesAPI.Endpoints
             var notesGroup = group.MapGroup("notes").RequireAuthorization();
 
             notesGroup.MapPost("", CreateNoteHandler);
-            notesGroup.MapPut("/{id}", UpdateNoteHandler);
-            notesGroup.MapDelete("/{id}", DeleteNoteHandler);
-            notesGroup.MapPatch("/{id}", MoveNoteHandler);
-            notesGroup.MapGet("/{id}", GetNoteHandler);
+            notesGroup.MapPut("{id}", UpdateNoteHandler);
+            notesGroup.MapDelete("{id}", DeleteNoteHandler);
+            notesGroup.MapPatch("{id}", MoveNoteHandler);
+            notesGroup.MapGet("{id}", GetNoteHandler);
         }
 
         private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
