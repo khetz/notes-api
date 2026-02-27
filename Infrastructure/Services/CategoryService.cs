@@ -1,7 +1,7 @@
 ﻿using Application.Inputs;
 using Application.Interfaces;
+using Application.Outputs;
 using Application.Services;
-using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -35,11 +35,11 @@ namespace Infrastructure.Services
             return Result.Deleted;
         }
 
-        public async Task<ErrorOr<IReadOnlyCollection<Category>>> GetCategoriesAsync(bool includeNotes)
+        public async Task<ErrorOr<IReadOnlyCollection<CategoryResponse>>> GetCategoriesAsync(bool includeNotes)
         {
             var userId = GetUserId();
             var categories = await _categoryRepository.GetAllAsync(userId, includeNotes);
-            return categories.ToList();
+            return categories.Select(c => c.ToCategoryResponse()).ToList();
         }
 
         public async Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request)

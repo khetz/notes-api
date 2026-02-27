@@ -1,5 +1,5 @@
 ﻿using Application.Inputs;
-using Domain.Entities;
+using Application.Outputs;
 using ErrorOr;
 
 namespace Application.Services
@@ -8,7 +8,7 @@ namespace Application.Services
     {
         Task CreateCategoryAsync(CreateCategoryRequest request);
         Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request);
-        Task<ErrorOr<IReadOnlyCollection<Category>>> GetCategoriesAsync(bool includeNotes);
+        Task<ErrorOr<IReadOnlyCollection<CategoryResponse>>> GetCategoriesAsync(bool includeNotes);
         Task<ErrorOr<Deleted>> DeleteCategoryAsync(int categoryId);
     }
 }
