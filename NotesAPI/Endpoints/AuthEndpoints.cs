@@ -32,10 +32,10 @@ namespace NotesAPI.Endpoints
             return Results.Ok();
         }
 
-        private static async Task<IResult> RefreshHandler([FromBody] RefreshTokenRequest refreshTokenRequest,
+        private static async Task<IResult> RefreshHandler(
             [FromServices] IAuthService authService)
         {
-            var refreshTokenObject = await authService.RefreshAsync(refreshTokenRequest);
+            var refreshTokenObject = await authService.RefreshAsync();
 
             return refreshTokenObject.MatchFirst(
                 value => Results.Ok(value),

@@ -75,9 +75,12 @@ namespace Infrastructure.Services
             await _userService.AddUserAsync(user);
         }
 
-        public async Task<ErrorOr<AccessTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest)
+        public async Task<ErrorOr<AccessTokenResponse>> RefreshAsync()
         {
-            var storedRefreshToken = await _refreshTokenRepository.GetByTokenAsync(refreshTokenRequest.RefreshToken);
+            var currentRefreshToken = _httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
+            if (currentRefreshToken == null) return Error.Unauthorized();
+
+            var storedRefreshToken = await _refreshTokenRepository.GetByTokenAsync(currentRefreshToken);
 
             if (storedRefreshToken.FirstError == Error.NotFound() || storedRefreshToken.Value.ExpirationDate < DateTime.UtcNow)
                 return Error.Unauthorized();
