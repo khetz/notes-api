@@ -113,5 +113,21 @@ namespace NotesAPI.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services, string corsPolicyName)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: corsPolicyName,
+                                      policy =>
+                                      {
+                                          policy.WithOrigins("http://localhost:4200")
+                                          .AllowAnyMethod()
+                                          .AllowAnyHeader();
+                                      });
+            });
+
+            return services;
+        }
     }
 }
