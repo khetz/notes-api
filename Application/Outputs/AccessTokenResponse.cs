@@ -1,8 +1,7 @@
 ﻿namespace Application.Outputs
 {
-    public class RefreshTokenResponse
+    public class AccessTokenResponse
     {
         public required string AccessToken { get; set; }
-        public required string RefreshToken { get; set; }
     }
 }
