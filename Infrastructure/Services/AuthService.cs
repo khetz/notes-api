@@ -6,6 +6,7 @@ using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Configuration;
 using Infrastructure.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
@@ -16,17 +17,19 @@ namespace Infrastructure.Services
         private readonly IUserService _userService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly JwtSettings _jwtSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthService(JwtService jwtService, IUserService userService, IRefreshTokenRepository refreshTokenRepository,
-            IOptions<JwtSettings> jwtSettings)
+            IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContextAccessor)
         {
             _jwtService = jwtService;
             _userService = userService;
             _refreshTokenRepository = refreshTokenRepository;
             _jwtSettings = jwtSettings.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ErrorOr<RefreshTokenResponse>> LoginAsync(LoginRequest loginRequest)
+        public async Task<ErrorOr<AccessTokenResponse>> LoginAsync(LoginRequest loginRequest)
         {
             var user = await _userService.GetByUsernameAsync(loginRequest.Username);
 
@@ -40,7 +43,7 @@ namespace Infrastructure.Services
             var accessToken = _jwtService.GenerateToken(user.Value.Id, loginRequest.Username);
             var refreshToken = _jwtService.GenerateRefreshToken();
             var refreshTokenObject = new RefreshToken
-            {
+            { 
                 Token = refreshToken,
                 Username = loginRequest.Username,
                 ExpirationDate = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays)
@@ -48,7 +51,17 @@ namespace Infrastructure.Services
 
             await _refreshTokenRepository.AddAsync(refreshTokenObject);
 
-            return new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken };
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
+            return new AccessTokenResponse { AccessToken = accessToken };
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest registrationRequest)
@@ -62,7 +75,7 @@ namespace Infrastructure.Services
             await _userService.AddUserAsync(user);
         }
 
-        public async Task<ErrorOr<RefreshTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest)
+        public async Task<ErrorOr<AccessTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest)
         {
             var storedRefreshToken = await _refreshTokenRepository.GetByTokenAsync(refreshTokenRequest.RefreshToken);
 
@@ -82,7 +95,17 @@ namespace Infrastructure.Services
             storedRefreshTokenValue.ExpirationDate = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
             await _refreshTokenRepository.UpdateAsync(storedRefreshTokenValue);
 
-            return new RefreshTokenResponse { AccessToken = accessToken, RefreshToken = refreshToken };
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
+            return new AccessTokenResponse { AccessToken = accessToken };
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Application.Services
     public interface IAuthService
     {
         Task RegisterUserAsync(RegisterUserRequest registrationRequest);
-        Task<ErrorOr<RefreshTokenResponse>> LoginAsync(LoginRequest loginRequest);
-        Task<ErrorOr<RefreshTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest);
+        Task<ErrorOr<AccessTokenResponse>> LoginAsync(LoginRequest loginRequest);
+        Task<ErrorOr<AccessTokenResponse>> RefreshAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }
