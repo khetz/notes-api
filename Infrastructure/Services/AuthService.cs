@@ -55,7 +55,7 @@ namespace Infrastructure.Services
             {
                 HttpOnly = true,
                 Secure = true, 
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(7)
             };
 
@@ -102,7 +102,7 @@ namespace Infrastructure.Services
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(7)
             };
 
