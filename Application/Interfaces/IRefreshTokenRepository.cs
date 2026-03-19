@@ -8,5 +8,6 @@ namespace Application.Interfaces
         Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token);
         Task UpdateAsync(RefreshToken refreshToken);
         Task AddAsync(RefreshToken refreshToken);
+        Task<ErrorOr<Deleted>> DeleteAsync(string token);
     }
 }

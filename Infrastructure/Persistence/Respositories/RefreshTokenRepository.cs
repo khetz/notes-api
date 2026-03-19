@@ -20,6 +20,19 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<ErrorOr<Deleted>> DeleteAsync(string token)
+        {
+            var refreshToken = await _appDbContext.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Token == token);
+
+            if (refreshToken == null) return Error.NotFound();
+
+            _appDbContext.Remove(refreshToken);
+            await _appDbContext.SaveChangesAsync();
+            return Result.Deleted;
+
+        }
+
         public async Task<ErrorOr<RefreshToken>> GetByTokenAsync(string token)
         {
             var refreshToken = await _appDbContext.RefreshTokens

@@ -7,6 +7,7 @@ using ErrorOr;
 using Infrastructure.Configuration;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
@@ -109,6 +110,23 @@ namespace Infrastructure.Services
             _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
 
             return new AccessTokenResponse { AccessToken = accessToken };
+        }
+
+        public async Task LogoutAsync()
+        {
+            var currentRefreshToken = _httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
+
+            if (currentRefreshToken != null)
+            {
+                await _refreshTokenRepository.DeleteAsync(currentRefreshToken);
+            }
+
+            _httpContextAccessor.HttpContext?.Response.Cookies.Delete("refreshToken", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
         }
     }
 }

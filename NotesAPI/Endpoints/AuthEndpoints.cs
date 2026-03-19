@@ -13,6 +13,7 @@ namespace NotesAPI.Endpoints
             authGroup.MapPost("login", LoginHandler);
             authGroup.MapPost("register", RegistrationHandler);
             authGroup.MapPost("refresh", RefreshHandler);
+            authGroup.MapPost("logout", LogoutHandler);
         }
 
         private static async Task<IResult> LoginHandler([FromBody] LoginRequest loginRequest, [FromServices] IAuthService authService)
@@ -40,6 +41,13 @@ namespace NotesAPI.Endpoints
             return refreshTokenObject.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private static async Task<IResult> LogoutHandler(
+            [FromServices] IAuthService authService)
+        {
+            await authService.LogoutAsync();
+            return Results.Ok();
         }
     }
 }
