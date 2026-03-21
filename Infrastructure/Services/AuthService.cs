@@ -7,7 +7,6 @@ using ErrorOr;
 using Infrastructure.Configuration;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
