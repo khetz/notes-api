@@ -35,10 +35,10 @@ namespace Infrastructure.Services
             return Result.Deleted;
         }
 
-        public async Task<ErrorOr<IReadOnlyCollection<CategoryResponse>>> GetCategoriesAsync(bool includeNotes)
+        public async Task<ErrorOr<IReadOnlyCollection<CategoryResponse>>> GetCategoriesAsync()
         {
             var userId = GetUserId();
-            var categories = await _categoryRepository.GetAllAsync(userId, includeNotes);
+            var categories = await _categoryRepository.GetAllAsync(userId);
             return categories.Select(c => c.ToCategoryResponse()).ToList();
         }
 

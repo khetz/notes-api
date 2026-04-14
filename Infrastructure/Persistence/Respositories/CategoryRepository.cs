@@ -29,12 +29,10 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyCollection<Category>> GetAllAsync(int userId, bool includeNotes)
+        public async Task<IReadOnlyCollection<Category>> GetAllAsync(int userId)
         {
             var categoriesQuery = _appDbContext.Categories
                 .Where(c => c.UserId == userId);
-
-            if (includeNotes) categoriesQuery = categoriesQuery.Include(c => c.Notes);
 
             return await categoriesQuery.ToListAsync();
         }

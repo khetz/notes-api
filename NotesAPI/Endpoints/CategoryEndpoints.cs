@@ -34,10 +34,9 @@ namespace NotesAPI.Endpoints
         }
 
         private async static Task<IResult> GetAllCategoriesHandler(
-            [FromServices] ICategoryService categoryService,
-            [FromQuery] bool includeNotes = false)
+            [FromServices] ICategoryService categoryService)
         {
-            var categories = await categoryService.GetCategoriesAsync(includeNotes);
+            var categories = await categoryService.GetCategoriesAsync();
             return categories.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
@@ -50,6 +49,13 @@ namespace NotesAPI.Endpoints
             return deletionResult.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private async static Task<IResult> GetNotesByCategory(
+            [FromRoute] int id,
+            [FromServices] ICategoryService categoryService)
+        {
+
         }
     }
 }
