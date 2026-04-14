@@ -33,8 +33,9 @@ namespace NotesAPI.Endpoints
                 firstError => Results.Problem(firstError.ToString()));
         }
 
-        private async static Task<IResult> GetAllCategoriesHandler([FromQuery] bool includeNotes,
-            [FromServices] ICategoryService categoryService)
+        private async static Task<IResult> GetAllCategoriesHandler(
+            [FromServices] ICategoryService categoryService,
+            [FromQuery] bool includeNotes = false)
         {
             var categories = await categoryService.GetCategoriesAsync(includeNotes);
             return categories.MatchFirst(
