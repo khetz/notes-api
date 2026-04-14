@@ -42,6 +42,13 @@ namespace Infrastructure.Services
             return categories.Select(c => c.ToCategoryResponse()).ToList();
         }
 
+        public async Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> GetNotesByCategoryAsync(int categoryId)
+        {
+            var userId = GetUserId();
+            var notes = await _categoryRepository.GetNotesByCategoryIdAsync(categoryId, userId);
+            return notes.Select(n => n.ToNoteResponse()).ToList();
+        }
+
         public async Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request)
         {
             var userId = GetUserId();

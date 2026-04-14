@@ -14,6 +14,7 @@ namespace NotesAPI.Endpoints
             group.MapPatch("{id}", UpdateCategoryHandler);
             group.MapGet("", GetAllCategoriesHandler);
             group.MapDelete("{id}", DeleteCategoryHandler);
+            group.MapGet("{id}/notes", GetNotesByCategoryHandler);
         }
 
         private async static Task CreateCategoryHandler([FromBody] CreateCategoryRequest request,
@@ -51,11 +52,14 @@ namespace NotesAPI.Endpoints
                 firstError => Results.Problem(firstError.ToString()));
         }
 
-        private async static Task<IResult> GetNotesByCategory(
+        private async static Task<IResult> GetNotesByCategoryHandler(
             [FromRoute] int id,
             [FromServices] ICategoryService categoryService)
         {
-
+            var notesResult = await categoryService.GetNotesByCategoryAsync(id);
+            return notesResult.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
         }
     }
 }

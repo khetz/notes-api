@@ -37,6 +37,14 @@ namespace Infrastructure.Persistence.Respositories
             return await categoriesQuery.ToListAsync();
         }
 
+        public async Task<IReadOnlyCollection<Note>> GetNotesByCategoryIdAsync(int categoryId, int userId)
+        {
+            var notesQuery = _appDbContext.Notes
+                .Where(n => n.UserId == userId && n.CategoryId == categoryId);
+
+            return await notesQuery.ToListAsync();
+        }
+
         public async Task UpdateAsync(int categoryId, int userId, string name)
         {
             var category = await _appDbContext.Categories

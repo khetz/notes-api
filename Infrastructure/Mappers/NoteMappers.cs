@@ -1,4 +1,5 @@
 ﻿using Application.Inputs;
+using Application.Outputs;
 using Domain.Entities;
 
 namespace Infrastructure.Mappers
@@ -38,6 +39,16 @@ namespace Infrastructure.Mappers
             UserId = userId,
             User = null,
             Order = 0
+        };
+
+        internal static NoteResponse ToNoteResponse(this Note note) => new()
+        {
+            Id = note.Id,
+            Title = note.Title,
+            Content = note.Content,
+            LastUpdatedAt = note.LastUpdatedAt,
+            CreatedAt = note.CreatedAt,
+            Order = note.Order,
         };
     }
 }

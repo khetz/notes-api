@@ -10,5 +10,6 @@ namespace Application.Services
         Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request);
         Task<ErrorOr<IReadOnlyCollection<CategoryResponse>>> GetCategoriesAsync();
         Task<ErrorOr<Deleted>> DeleteCategoryAsync(int categoryId);
+        Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> GetNotesByCategoryAsync(int categoryId);
     }
 }
