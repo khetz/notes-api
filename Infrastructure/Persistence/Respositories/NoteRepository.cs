@@ -30,6 +30,13 @@ namespace Infrastructure.Persistence.Respositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<IReadOnlyCollection<Note>> GetAllAsync(int userId)
+        {
+            return await _appDbContext.Notes
+                .Where(n => n.UserId == userId)
+                .ToListAsync();
+        }
+
         public async Task<Note> GetAsync(int id, int userId)
         {
             return await _appDbContext.Notes

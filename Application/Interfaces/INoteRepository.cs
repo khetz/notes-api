@@ -10,5 +10,6 @@ namespace Application.Interfaces
         Task DeleteAsync(int id, int userId);
         Task MoveAsync(MoveNoteRequest request, int userId);
         Task<Note> GetAsync(int id, int userId);
+        Task<IReadOnlyCollection<Note>> GetAllAsync(int userId);
     }
 }

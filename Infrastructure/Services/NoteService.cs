@@ -1,5 +1,6 @@
 ﻿using Application.Inputs;
 using Application.Interfaces;
+using Application.Outputs;
 using Application.Services;
 using Domain.Entities;
 using ErrorOr;
@@ -32,6 +33,13 @@ namespace Infrastructure.Services
             var userId = GetUserId();
             await _noteRepository.DeleteAsync(id, userId);
             return Result.Deleted;
+        }
+
+        public async Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> GetAllNotesAsync()
+        {
+            var userId = GetUserId();
+            var notes = await _noteRepository.GetAllAsync(userId);
+            return notes.Select(n => n.ToNoteResponse()).ToList();
         }
 
         public async Task<ErrorOr<Note>> GetNoteAsync(int id)
