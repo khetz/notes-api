@@ -13,8 +13,7 @@ namespace Infrastructure.Mappers
             CategoryId = request.CategoryId,
             Category = null,
             UserId = userId,
-            User = null,
-            Order = 0
+            User = null
         };
 
         internal static Note ToNote(this UpdateNoteRequest request, int userId) => new()
@@ -25,20 +24,7 @@ namespace Infrastructure.Mappers
             CategoryId = null,
             Category = null,
             UserId = userId,
-            User = null,
-            Order = 0
-        };
-
-        internal static Note ToNote(this MoveNoteRequest request, int userId) => new()
-        {
-            Id = request.Id,
-            Title = "",
-            Content = "",
-            CategoryId = null,
-            Category = null,
-            UserId = userId,
-            User = null,
-            Order = 0
+            User = null
         };
 
         internal static NoteResponse ToNoteResponse(this Note note) => new()
@@ -47,8 +33,7 @@ namespace Infrastructure.Mappers
             Title = note.Title,
             Content = note.Content,
             LastUpdatedAt = note.LastUpdatedAt,
-            CreatedAt = note.CreatedAt,
-            Order = note.Order,
+            CreatedAt = note.CreatedAt
         };
     }
 }

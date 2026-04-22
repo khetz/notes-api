@@ -13,7 +13,6 @@ namespace NotesAPI.Endpoints
             notesGroup.MapPost("", CreateNoteHandler);
             notesGroup.MapPut("{id}", UpdateNoteHandler);
             notesGroup.MapDelete("{id}", DeleteNoteHandler);
-            notesGroup.MapPatch("{id}", MoveNoteHandler);
             notesGroup.MapGet("{id}", GetNoteHandler);
             notesGroup.MapGet("", GetAllNotesHandler);
         }
@@ -41,15 +40,6 @@ namespace NotesAPI.Endpoints
 
             return deletionResult.MatchFirst(
                 value => Results.Ok(deletionResult),
-                firstError => Results.Problem(firstError.ToString()));
-        }
-
-        private async static Task<IResult> MoveNoteHandler([FromRoute] int id, [FromServices] INoteService noteService,
-            [FromBody] MoveNoteRequest request)
-        {
-            var updateResult = await noteService.MoveNoteAsync(request);
-            return updateResult.MatchFirst(
-                value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));
         }
 

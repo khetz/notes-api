@@ -49,13 +49,6 @@ namespace Infrastructure.Services
             return note;
         }
 
-        public async Task<ErrorOr<Updated>> MoveNoteAsync(MoveNoteRequest request)
-        {
-            var userId = GetUserId();
-            await _noteRepository.MoveAsync(request, userId);
-            return Result.Updated;
-        }
-
         public async Task<ErrorOr<Updated>> UpdateNoteAsync(UpdateNoteRequest request)
         {
             var userId = GetUserId();

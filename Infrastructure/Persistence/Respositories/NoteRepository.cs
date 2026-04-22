@@ -44,18 +44,6 @@ namespace Infrastructure.Persistence.Respositories
                 ?? throw new KeyNotFoundException();
         }
 
-        public async Task MoveAsync(MoveNoteRequest request, int userId)
-        {
-            var note = await _appDbContext
-                .Notes.FirstOrDefaultAsync(n => n.Id == request.Id && n.UserId == userId)
-                ?? throw new KeyNotFoundException();
-
-            note.Order = request.Order;
-            note.CategoryId = request.CategoryId;
-
-            await _appDbContext.SaveChangesAsync();
-        }
-
         public async Task UpdateAsync(Note note)
         {
             var noteToUpdate = await _appDbContext.Notes
