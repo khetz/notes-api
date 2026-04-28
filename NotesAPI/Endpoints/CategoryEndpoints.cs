@@ -8,7 +8,7 @@ namespace NotesAPI.Endpoints
     {
         public static void MapCategoryEndpoints(this RouteGroupBuilder routeBuilder)
         {
-            var group = routeBuilder.MapGroup("categories");
+            var group = routeBuilder.MapGroup("categories").RequireAuthorization();
 
             group.MapPost("", CreateCategoryHandler);
             group.MapPatch("{id}", UpdateCategoryHandler);
