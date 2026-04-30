@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Outputs;
 using Application.Services;
+using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -21,11 +22,11 @@ namespace Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task CreateCategoryAsync(CreateCategoryRequest request)
+        public async Task<ErrorOr<Category>> CreateCategoryAsync(CreateCategoryRequest request)
         {
             var userId = GetUserId();
             var category = request.ToCategory(userId);
-            await _categoryRepository.CreateAsync(category);
+            return await _categoryRepository.CreateAsync(category);
         }
 
         public async Task<ErrorOr<Deleted>> DeleteCategoryAsync(int categoryId)
@@ -49,11 +50,11 @@ namespace Infrastructure.Services
             return notes.Select(n => n.ToNoteResponse()).ToList();
         }
 
-        public async Task<ErrorOr<Updated>> UpdateCategoryAsync(UpdateCategoryRequest request)
+        public async Task<ErrorOr<Category>> UpdateCategoryAsync(UpdateCategoryRequest request)
         {
             var userId = GetUserId();
-            await _categoryRepository.UpdateAsync(request.Id, userId, request.Name);
-            return Result.Updated;
+            var updatedCategory = await _categoryRepository.UpdateAsync(request.Id, userId, request.Name);
+            return updatedCategory;
         }
 
         private int GetUserId()

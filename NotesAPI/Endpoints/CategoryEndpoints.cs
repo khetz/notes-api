@@ -11,23 +11,25 @@ namespace NotesAPI.Endpoints
             var group = routeBuilder.MapGroup("categories").RequireAuthorization();
 
             group.MapPost("", CreateCategoryHandler);
-            group.MapPatch("{id}", UpdateCategoryHandler);
+            group.MapPut("{id}", UpdateCategoryHandler);
             group.MapGet("", GetAllCategoriesHandler);
             group.MapDelete("{id}", DeleteCategoryHandler);
             group.MapGet("{id}/notes", GetNotesByCategoryHandler);
         }
 
-        private async static Task CreateCategoryHandler([FromBody] CreateCategoryRequest request,
+        private async static Task<IResult> CreateCategoryHandler([FromBody] CreateCategoryRequest request,
             [FromServices] ICategoryService categoryService)
         {
-            await categoryService.CreateCategoryAsync(request);
+            var creationResult = await categoryService.CreateCategoryAsync(request);
+
+            return creationResult.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
         }
 
         private async static Task<IResult> UpdateCategoryHandler([FromBody] UpdateCategoryRequest request,
             [FromServices] ICategoryService categoryService)
-        {
-            // TODO: add id validation
-
+        { 
             var updateResult = await categoryService.UpdateCategoryAsync(request);
             return updateResult.MatchFirst(
                 value => Results.Ok(value),

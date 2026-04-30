@@ -13,10 +13,11 @@ namespace Infrastructure.Persistence.Respositories
             _appDbContext = appDbContext;
         }
 
-        public async Task CreateAsync(Category category)
+        public async Task<Category> CreateAsync(Category category)
         {
             _appDbContext.Categories.Add(category);
             await _appDbContext.SaveChangesAsync();
+            return category;
         }
 
         public async Task DeleteAsync(int categoryId, int userId)
@@ -45,7 +46,7 @@ namespace Infrastructure.Persistence.Respositories
             return await notesQuery.ToListAsync();
         }
 
-        public async Task UpdateAsync(int categoryId, int userId, string name)
+        public async Task<Category> UpdateAsync(int categoryId, int userId, string name)
         {
             var category = await _appDbContext.Categories
                 .FirstOrDefaultAsync(c => c.Id == categoryId && c.UserId == userId)
@@ -53,6 +54,8 @@ namespace Infrastructure.Persistence.Respositories
 
             category.Name = name;
             await _appDbContext.SaveChangesAsync();
+
+            return category;
         }
     }
 }
