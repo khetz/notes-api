@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence
                 .HasOne(n => n.Category)
                 .WithMany(c => c.Notes)
                 .HasForeignKey(n => n.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Note>()
                 .HasOne(n => n.User)

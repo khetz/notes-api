@@ -2,7 +2,7 @@
 using Application.Outputs;
 using ErrorOr;
 
-namespace Application.Services
+namespace Application.Interfaces.Services
 {
     public interface IAuthService
     {

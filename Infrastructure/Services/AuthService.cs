@@ -1,7 +1,7 @@
 ﻿using Application.Inputs;
-using Application.Interfaces;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Application.Outputs;
-using Application.Services;
 using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Configuration;

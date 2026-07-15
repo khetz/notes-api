@@ -1,5 +1,5 @@
 ﻿using Application.Inputs;
-using Application.Services;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NotesAPI.Endpoints

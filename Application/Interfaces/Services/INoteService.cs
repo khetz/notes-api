@@ -3,7 +3,7 @@ using Application.Outputs;
 using Domain.Entities;
 using ErrorOr;
 
-namespace Application.Services
+namespace Application.Interfaces.Services
 {
     public interface INoteService
     {
