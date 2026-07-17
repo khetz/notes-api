@@ -17,10 +17,11 @@ namespace Infrastructure.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly EmbeddingService _embeddingService;
 
-        public NoteService(INoteRepository noteRepository, IHttpContextAccessor httpContextAccessor)
+        public NoteService(INoteRepository noteRepository, IHttpContextAccessor httpContextAccessor, EmbeddingService embeddingService)
         {
             _noteRepository = noteRepository;
             _httpContextAccessor = httpContextAccessor;
+            _embeddingService = embeddingService;
         }
 
         public async Task CreatNoteAsync(CreateNoteRequest request)
