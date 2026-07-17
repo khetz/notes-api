@@ -2,6 +2,7 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Outputs;
+using Application.Services;
 using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
@@ -14,6 +15,7 @@ namespace Infrastructure.Services
     {
         private readonly INoteRepository _noteRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly EmbeddingService _embeddingService;
 
         public NoteService(INoteRepository noteRepository, IHttpContextAccessor httpContextAccessor)
         {
@@ -24,7 +26,9 @@ namespace Infrastructure.Services
         public async Task CreatNoteAsync(CreateNoteRequest request)
         {
             var userId = GetUserId();
-            var note = request.ToNote(userId);
+
+            var embedding = await EmbedNote(request.Title, request.Content);
+            var note = request.ToNote(userId, embedding);
             await _noteRepository.CreateAsync(note);
         }
 
@@ -64,6 +68,12 @@ namespace Infrastructure.Services
             if (user == null) throw new KeyNotFoundException(nameof(user));
 
             return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
+        }
+
+        private async Task<byte[]> EmbedNote(string noteTitle, string noteContent)
+        {
+            var vector = await _embeddingService.GetEmbeddingsAsync($"{noteTitle} {noteContent}");
+            return EmbeddingService.ToBytes(vector);
         }
     }
 }
