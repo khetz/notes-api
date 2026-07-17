@@ -6,14 +6,15 @@ namespace Infrastructure.Mappers
 {
     internal static class NoteMappers
     {
-        internal static Note ToNote(this CreateNoteRequest request, int userId) => new()
+        internal static Note ToNote(this CreateNoteRequest request, int userId, byte[] embedding) => new()
         {
             Title = request.Title,
             Content = request.Content,
             CategoryId = request.CategoryId,
             Category = null,
             UserId = userId,
-            User = null
+            User = null,
+            Embedding = embedding
         };
 
         internal static Note ToNote(this UpdateNoteRequest request, int userId) => new()
