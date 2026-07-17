@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Services;
 using Infrastructure.Configuration;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Respositories;
@@ -40,6 +41,7 @@ namespace NotesAPI.Extensions
 
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
+            services.AddSingleton<EmbeddingService>();
             services.AddScoped<JwtService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
