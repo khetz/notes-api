@@ -7,7 +7,7 @@
         public required string Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
-        public byte[]? Embeddings { get; set; }
+        public byte[]? Embedding { get; set; }
 
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
