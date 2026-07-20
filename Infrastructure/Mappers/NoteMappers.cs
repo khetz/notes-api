@@ -34,7 +34,8 @@ namespace Infrastructure.Mappers
             Title = note.Title,
             Content = note.Content,
             LastUpdatedAt = note.LastUpdatedAt,
-            CreatedAt = note.CreatedAt
+            CreatedAt = note.CreatedAt,
+            Embedding = note.Embedding?.ToArray()
         };
     }
 }

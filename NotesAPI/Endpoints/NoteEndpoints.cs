@@ -15,6 +15,7 @@ namespace NotesAPI.Endpoints
             notesGroup.MapDelete("{id}", DeleteNoteHandler);
             notesGroup.MapGet("{id}", GetNoteHandler);
             notesGroup.MapGet("", GetAllNotesHandler);
+            notesGroup.MapGet("search", SemanticSearchHandler);
         }
 
         private async static Task CreateNoteHandler([FromBody] CreateNoteRequest request, [FromServices] INoteService noteService)
@@ -54,6 +55,14 @@ namespace NotesAPI.Endpoints
         private async static Task<IResult> GetAllNotesHandler([FromServices] INoteService noteService)
         {
             var notes = await noteService.GetAllNotesAsync();
+            return notes.MatchFirst(
+                value => Results.Ok(value),
+                firstError => Results.Problem(firstError.ToString()));
+        }
+
+        private async static Task<IResult> SemanticSearchHandler([FromQuery] string query,  [FromServices] INoteService noteService)
+        {
+            var notes = await noteService.PerformSemanticSearchAsync(query);
             return notes.MatchFirst(
                 value => Results.Ok(value),
                 firstError => Results.Problem(firstError.ToString()));

@@ -12,5 +12,6 @@ namespace Application.Interfaces.Services
         Task<ErrorOr<Deleted>> DeleteNoteAsync(int id);
         Task<ErrorOr<Note>> GetNoteAsync(int id);
         Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> GetAllNotesAsync();
+        Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> PerformSemanticSearchAsync(string query);
     }
 }

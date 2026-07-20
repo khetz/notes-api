@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Anthropic.SDK;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
 using Infrastructure.Configuration;
@@ -42,6 +43,15 @@ namespace NotesAPI.Extensions
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddSingleton<EmbeddingService>();
+            services.AddSingleton(new AnthropicClient(Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") ??
+                throw new Exception("ANTRHOPIC_API_KEY not set")));
+            services.AddHttpClient("Voyage", client =>
+            {
+                client.DefaultRequestHeaders.Add(
+                    "Authorization",
+                    $"Bearer {Environment.GetEnvironmentVariable("VOYAGE_API_KEY")}");
+            });
+
             services.AddScoped<JwtService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();

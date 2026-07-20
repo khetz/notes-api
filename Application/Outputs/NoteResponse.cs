@@ -8,5 +8,6 @@
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public int CategoryId { get; set; }
+        public byte[]? Embedding { get; set; }
     }
 }

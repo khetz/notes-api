@@ -10,5 +10,6 @@ namespace Application.Interfaces.Repositories
         Task DeleteAsync(int id, int userId);
         Task<Note> GetAsync(int id, int userId);
         Task<IReadOnlyCollection<Note>> GetAllAsync(int userId);
+        Task<IReadOnlyCollection<Note>> PerformSemanticSearchAsync(string query, int userId);
     }
 }

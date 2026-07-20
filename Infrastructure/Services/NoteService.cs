@@ -76,5 +76,12 @@ namespace Infrastructure.Services
             var vector = await _embeddingService.GetEmbeddingsAsync($"{noteTitle} {noteContent}");
             return EmbeddingService.ToBytes(vector);
         }
+
+        public async Task<ErrorOr<IReadOnlyCollection<NoteResponse>>> PerformSemanticSearchAsync(string query)
+        {
+            var userId = GetUserId();
+            var notes = await _noteRepository.PerformSemanticSearchAsync(query, userId);
+            return notes.Select(n => n.ToNoteResponse()).ToList();
+        }
     }
 }
