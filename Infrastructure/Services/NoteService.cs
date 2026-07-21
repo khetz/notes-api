@@ -7,7 +7,9 @@ using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Infrastructure.Services
 {
@@ -16,12 +18,14 @@ namespace Infrastructure.Services
         private readonly INoteRepository _noteRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly EmbeddingService _embeddingService;
+        private readonly NoteAiService _noteAiService;
 
-        public NoteService(INoteRepository noteRepository, IHttpContextAccessor httpContextAccessor, EmbeddingService embeddingService)
+        public NoteService(INoteRepository noteRepository, IHttpContextAccessor httpContextAccessor, EmbeddingService embeddingService, NoteAiService noteAiService)
         {
             _noteRepository = noteRepository;
             _httpContextAccessor = httpContextAccessor;
             _embeddingService = embeddingService;
+            _noteAiService = noteAiService;
         }
 
         public async Task CreatNoteAsync(CreateNoteRequest request)
@@ -82,6 +86,26 @@ namespace Infrastructure.Services
             var userId = GetUserId();
             var notes = await _noteRepository.PerformSemanticSearchAsync(query, userId);
             return notes.Select(n => n.ToNoteResponse()).ToList();
+        }
+
+        public async Task AnalyseNoteAsync(int id)
+        {
+            var note = await GetNoteAsync(id);
+
+            if (note.IsError) return;
+
+            var noteValue = note.Value;
+            var noteAnalysis = await _noteAiService.AnalyseNoteAsync(noteValue.Title, noteValue.Content, noteValue.Category?.Name ?? "");
+
+            var updatedNote = new UpdateNoteRequest()
+            {
+                Title = noteValue.Title,
+                Content = noteValue.Content,
+                Summary = noteAnalysis.Summary,
+                Tags = JsonSerializer.Serialize(noteAnalysis.Tags)
+            };
+
+            await UpdateNoteAsync(updatedNote);
         }
     }
 }

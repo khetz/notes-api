@@ -43,6 +43,7 @@ namespace Infrastructure.Persistence.Respositories
         public async Task<Note> GetAsync(int id, int userId)
         {
             return await _appDbContext.Notes
+                .Include(n => n.Category)
                 .FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId)
                 ?? throw new KeyNotFoundException();
         }
@@ -78,6 +79,8 @@ namespace Infrastructure.Persistence.Respositories
 
             noteToUpdate.Title = note.Title;
             noteToUpdate.Content = note.Content;
+            noteToUpdate.Summary = note.Summary;
+            noteToUpdate.Tags = note.Tags;
 
             await _appDbContext.SaveChangesAsync();
         }

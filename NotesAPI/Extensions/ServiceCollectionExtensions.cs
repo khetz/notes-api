@@ -51,6 +51,7 @@ namespace NotesAPI.Extensions
                     "Authorization",
                     $"Bearer {Environment.GetEnvironmentVariable("VOYAGE_API_KEY")}");
             });
+            services.AddSingleton<NoteAiService>();
 
             services.AddScoped<JwtService>();
             services.AddScoped<IUserService, UserService>();
