@@ -26,7 +26,9 @@ namespace Infrastructure.Mappers
             CategoryId = null,
             Category = null,
             UserId = userId,
-            User = null
+            User = null,
+            Summary = request.Summary,
+            Tags = request.Tags
         };
 
         internal static NoteResponse ToNoteResponse(this Note note) => new()
