@@ -7,7 +7,6 @@ using Domain.Entities;
 using ErrorOr;
 using Infrastructure.Mappers;
 using Microsoft.AspNetCore.Http;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -88,17 +87,18 @@ namespace Infrastructure.Services
             return notes.Select(n => n.ToNoteResponse()).ToList();
         }
 
-        public async Task AnalyseNoteAsync(int id)
+        public async Task<ErrorOr<NoteAiResponse>> AnalyseNoteAsync(int id)
         {
             var note = await GetNoteAsync(id);
 
-            if (note.IsError) return;
+            if (note.IsError) return Error.NotFound();
 
             var noteValue = note.Value;
             var noteAnalysis = await _noteAiService.AnalyseNoteAsync(noteValue.Title, noteValue.Content, noteValue.Category?.Name ?? "");
 
             var updatedNote = new UpdateNoteRequest()
             {
+                Id = noteValue.Id,
                 Title = noteValue.Title,
                 Content = noteValue.Content,
                 Summary = noteAnalysis.Summary,
@@ -106,6 +106,8 @@ namespace Infrastructure.Services
             };
 
             await UpdateNoteAsync(updatedNote);
+
+            return noteAnalysis;
         }
     }
 }

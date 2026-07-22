@@ -1,6 +1,7 @@
 ﻿using Application.Inputs;
 using Application.Outputs;
 using Domain.Entities;
+using System.Text.Json;
 
 namespace Infrastructure.Mappers
 {
@@ -35,7 +36,9 @@ namespace Infrastructure.Mappers
             Content = note.Content,
             LastUpdatedAt = note.LastUpdatedAt,
             CreatedAt = note.CreatedAt,
-            Embedding = note.Embedding?.ToArray()
+            Embedding = note.Embedding?.ToArray(),
+            Summary = note.Summary,
+            Tags = JsonSerializer.Deserialize<List<string>>(note.Tags ?? "[]") ?? []
         };
     }
 }

@@ -14,7 +14,7 @@ public class NoteAiService
         _client = client;
     }
 
-    public async Task<NoteAiResult> AnalyseNoteAsync(string title, string content, string category)
+    public async Task<NoteAiResponse> AnalyseNoteAsync(string title, string content, string category)
     {
         var response = await _client.Messages.GetClaudeMessageAsync(new MessageParameters
         {
@@ -36,20 +36,23 @@ public class NoteAiService
             ]
         });
 
-        var json = response.Content[0].ToString()!;
+        var json = response.Content[0].ToString()!
+            .Replace("```json", "")
+            .Replace("```", "")
+            .Trim();
 
         try
         {
-            var result = JsonSerializer.Deserialize<NoteAiResult>(json, new JsonSerializerOptions
+            var result = JsonSerializer.Deserialize<NoteAiResponse>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            return result ?? new NoteAiResult("Could not summarise note.", new List<string>());
+            return result ?? new NoteAiResponse("Could not summarise note.", new List<string>());
         }
         catch
         {
-            return new NoteAiResult("Could not summarise note.", new List<string>());
+            return new NoteAiResponse("Could not summarise note.", new List<string>());
         }
     }
 }
